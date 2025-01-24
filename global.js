@@ -8,7 +8,7 @@ let pages = [
     { url: 'index.html', title: 'Home' },
     { url: 'projects/index.html', title: 'Projects' },
     { url: 'contact/index.html', title: 'Contact' },
-    { url: 'resume.html', title: 'Resume' },
+    { url: 'resume/index.html', title: 'Resume' },
     { url: 'https://github.com/AdaMo22805.html', title: 'Github' },
   ];
 
@@ -31,6 +31,7 @@ for (let p of pages) {
     if (a.host != location.host) {
         a.target = "_blank";
     }
+    console.log(url)
   }
 
 document.body.insertAdjacentHTML(
