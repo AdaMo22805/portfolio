@@ -31,7 +31,6 @@ for (let p of pages) {
     if (a.host != location.host) {
         a.target = "_blank";
     }
-    console.log(url)
   }
 
 document.body.insertAdjacentHTML(
@@ -63,7 +62,6 @@ select.addEventListener('input', function (event) {
 
 let form = document.querySelector("form");
 form?.addEventListener('submit', function (event) {
-  // console.log('pressed submit');
   event.preventDefault();
   let data = new FormData(form);
   let url = form.action + "?";
