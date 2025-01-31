@@ -134,4 +134,24 @@ html{
       }
     }
 
+    #profile-stats{
+      dl{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        text-align: center;
+        dt {
+          font-size: 14px;
+          color: gray;
+          text-transform: uppercase;
+          grid-row: 1; /* Puts all labels in row 1 */
+        }
+      
+        dd {
+          font-size: 28px;
+          /* font-weight: bold; */
+          margin: 5px 0;
+          grid-row: 2; /* Puts all values in row 2 */
+        }
+      }
+    }
   }
