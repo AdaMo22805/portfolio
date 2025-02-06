@@ -185,6 +185,7 @@ html{
       flex: 1;     
       min-width: 150px;
       overflow: auto;
+      border-radius: 20px;
       li.swatch{
         display: inline-block;
         display: flex;
