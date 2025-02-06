@@ -90,9 +90,16 @@ html{
       article{
         display: grid;
         grid-template-rows: subgrid;
-        grid-row: span 4;
+        grid-row: span 3;
         h2{
           margin: 0;
+        }
+        p.year{
+          margin: 0;
+          color: gray;
+          font-family: Baskerville;
+          font-variant-numeric: oldstyle-nums;
+          font-size: 120%;
         }
       }
     }
@@ -154,4 +161,12 @@ html{
         }
       }
     }
+
+    #projects-pie-plot {
+      max-width: 20em;
+      margin-block: 2em;
+    
+      overflow: visible;
+    }
+
   }

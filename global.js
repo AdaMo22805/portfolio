@@ -92,8 +92,6 @@ export async function fetchJSON(url) {
   }
 }
 
-// fetchJSON('../lib/projects.json')
-
 export function renderProjects(project, containerElement, headingLevel = 'h2') {
   // write javascript that will allow dynamic heading levels based on previous function
   containerElement.innerHTML = '';
@@ -106,9 +104,11 @@ export function renderProjects(project, containerElement, headingLevel = 'h2') {
     }
     article.innerHTML = `
     <${headingLevel}>${p.title}</${headingLevel}>
-    <h4>${p.year}</h4>
     <img src="${p.image}" alt="${p.title}">
-    <p>${p.description}</p>
+    <div>
+      <p>${p.description}</p>
+      <p class="year">${p.year}</p>
+    </div>
 `;
     containerElement.appendChild(article);
   }
