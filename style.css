@@ -214,5 +214,34 @@ html{
     padding-right: 15px;
   }
   
+  &:has(path:hover) {
+    path:not(:hover) {
+      opacity: 0.5;
+    }
+    path {
+      transition: 300ms;
+      cursor: pointer;
+    }
+  }
+  svg.has-selection path:not(.selected) {
+    opacity: 0.5; 
+  }
+  svg.has-selection + .legend li:not(.selected) {
+    color: gray; 
+  }
+
+  .selected {
+    font-size: 110%;
+    font-weight: bold;
+    .swatch{
+      background-color: var(--color-accent) !important;
+    }
+    
+    &:is(path) {
+      fill: oklch(from var(--color-accent) l c h / 90%);
+      opacity: 1 !important;
+      transition: opacity 300ms, fill 300ms;
+    }
+  }
 
 }
