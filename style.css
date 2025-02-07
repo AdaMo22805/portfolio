@@ -107,6 +107,7 @@ html{
   section{
     margin: 10px;
     h2{
+      margin-top: 0px;
       border-bottom-width: 3px;
       border-bottom-color: var(--color-accent);
       border-bottom-style: solid;
@@ -138,6 +139,27 @@ html{
       ul{
         margin: 5px;
       }
+    }
+  }
+  .resume{
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: rgb(188, 188, 188);
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); */
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),   /* Main shadow */
+        0 1px 3px rgba(0, 0, 0, 0.08);
+    /* background: #fdfdfd; */
+    /* background-image: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(240,240,240,0.9)); */
+    font-size: 90%;
+    line-height: 130%;
+    h1{
+      margin-bottom: 40px;
     }
   }
 
