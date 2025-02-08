@@ -4,16 +4,33 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 const projects = await fetchJSON('../lib/projects.json');
 const projectsContainer = document.querySelector('.projects');
 let count = projects.length
-
 renderProjects(projects, projectsContainer, 'h2');
+
 const title = document.querySelector('.projects-title');
 title.innerHTML = `${count} Projects`;
 
-let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
+let arcGenerator = d3.arc().innerRadius(30).outerRadius(50);
+
+let selectedIndex = -1;
+let query = '';
+let selectedYear = null;
+
+function filterProjects(renderPie=false) { // Unified filtering function
+    let filteredProjects = projects.filter(project => {
+        let matchesQuery = Object.values(project).join('\n').toLowerCase().includes(query.toLowerCase());
+        let matchesYear = selectedYear ? project.year.toString() === selectedYear : true;
+        return matchesQuery && matchesYear;
+    });
+
+    projectsContainer.innerHTML = '';
+    renderProjects(filteredProjects, projectsContainer, 'h2');
+    if (renderPie){
+        renderPieChart(filteredProjects);
+    }
+}
 
 function renderPieChart(projectsGiven) {
     let colors = d3.scaleOrdinal(d3.schemeTableau10);
-
     let newRolledData = d3.rollups(
         projectsGiven,
         (v) => v.length,
@@ -39,30 +56,35 @@ function renderPieChart(projectsGiven) {
         .attr('d', arc)
         .attr('fill', colors(i))
         .on('click', () => {
-            selectedIndex = selectedIndex === i ? -1 : i;
-            newSVG
-                .selectAll('path')
-                .attr('class', (_, i) => (
-                    selectedIndex === i ? 'selected' : ''
-                ));
-            legend
-                .selectAll('li')
-                .attr('class', (_, idx) => (
-                    selectedIndex === idx ? 'swatch selected' : 'swatch'
+        selectedIndex = selectedIndex === i ? -1 : i;
+        selectedYear = (selectedYear === newData[i].label) ? null : newData[i].label;
+
+        newSVG
+            .selectAll('path')
+            .attr('class', (_, i) => (
+                selectedIndex === i ? 'selected' : ''
             ));
-            if (selectedIndex === -1) {
-                renderProjects(projects, projectsContainer, 'h2');
-                newSVG.classed('has-selection', false); ///
-            } else {
-                newSVG.classed('has-selection', true); ///
-                let filteredProjects = projects.filter(project => project.year.toString() === newData[i].label);
-                renderProjects(filteredProjects, projectsContainer, 'h2');
-            }
-          });;
+        legend
+            .selectAll('li')
+            .attr('class', (_, idx) => (
+                selectedIndex === idx ? 'swatch selected' : 'swatch'
+        ));
+        if (selectedIndex === -1) {
+            // renderProjects(projects, projectsContainer, 'h2');
+            newSVG.classed('has-selection', false);
+        } else {
+            newSVG.classed('has-selection', true);
+            let filteredProjects = projects.filter(project => project.year.toString() === newData[i].label);
+            // renderProjects(filteredProjects, projectsContainer, 'h2');
+
+        }
+            filterProjects(selectedIndex === -1);
+        });;
     });
 
     let legend = d3.select('.legend');
-    legend.selectAll('li').remove();
+        legend.selectAll('li').remove();
+
     newData.forEach((d, idx) => {
         legend.append('li')
             .attr('class', 'swatch')
@@ -72,21 +94,10 @@ function renderPieChart(projectsGiven) {
 }
 renderPieChart(projects);
 
-let query = '';
 let searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('input', (event) => {
   // update query value
   query = event.target.value;
-  // filter projects
-  let filteredProjects = projects.filter((project) => {
-    let values = Object.values(project).join('\n').toLowerCase();
-    return values.includes(query.toLowerCase());
-  });
-  projectsContainer.innerHTML = ''; //
-  // render filtered projects
-  renderProjects(filteredProjects, projectsContainer, 'h2');
-  renderPieChart(filteredProjects);//
+  filterProjects(true);
 });
-
-let selectedIndex = -1;

@@ -255,12 +255,12 @@ html{
   .selected {
     font-size: 110%;
     font-weight: bold;
-    .swatch{
+    /* .swatch{
       background-color: var(--color-accent) !important;
-    }
+    } */
     
     &:is(path) {
-      fill: oklch(from var(--color-accent) l c h / 90%);
+      /* fill: oklch(from var(--color-accent) l c h / 90%); */
       opacity: 1 !important;
       transition: opacity 300ms, fill 300ms;
     }
