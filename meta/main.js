@@ -1,5 +1,6 @@
 let data = [];
 
+
 async function loadData() {
     data = await d3.csv('loc.csv', (row) => ({
         ...row,
