@@ -266,4 +266,8 @@ html{
     }
   }
 
+  .gridlines{
+    opacity: 10%;
+  }
+
 }
