@@ -314,4 +314,49 @@ html{
     visibility: hidden;
   }
 
+  @keyframes marching-ants {
+    to {
+      stroke-dashoffset: -8; /* 5 + 3 */
+    }
+  }
+  
+  .selection {
+    fill-opacity: 0.1;
+    stroke: black;
+    stroke-opacity: 0.7;
+    stroke-dasharray: 5 3;
+    animation: marching-ants 2s linear infinite;
+  }
+
+  circle.selected {
+    fill: #ff6b6b;
+  }
+
+  #selection-count{
+    color:gray;
+    margin-top: 0;
+  }
+
+  .lang-stats{
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    text-align: center;
+    margin-top: 20px;
+    /* margin: 0, auto; */
+    dt{
+      font-size: 14px;
+      color: gray;
+      text-transform: uppercase;
+      /* font-weight: bold; */
+      grid-row: 1;
+      margin: 0;
+    }
+    dd{
+      font-size: 20px;
+      grid-row: 2;
+      margin: 5px 0;
+    }
+  }
+
 }
