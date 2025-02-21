@@ -1,9 +1,9 @@
 [
     {
-        "title": "Lorem ipsum dolor sit.",
-        "year": "c. 2024",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel sapiente repudiandae culpa quisquam adipisci aliquid fugiat accusantium cum natus, est neque ex, ea eum. Dolores tempora atque omnis a sequi!"
+        "title": "Bikewatching in Boston",
+        "year": "c. 2025",
+        "image": "../images/bikewatching.jpg",
+        "description": "This is an immersive, interactive map visualization of bike traffic in the Boston area during different times of the day."
     },
     {
         "title": "Voluptatum aut culpa veniam?",

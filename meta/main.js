@@ -129,7 +129,6 @@ function processCommits() {
         let first = lines[0];
         // We can use object destructuring to get these properties
         let { author, date, time, timezone, datetime } = first;
-
   
         // What information should we return about this commit?
         let ret = {
