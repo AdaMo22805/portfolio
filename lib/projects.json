@@ -2,43 +2,50 @@
     {
         "title": "Bikewatching in Boston",
         "year": "c. 2025",
-        "image": "../images/bikewatching.jpg",
+        "image": "../images/bikewatching_Boston.jpg",
+        "link": "https://adamo22805.github.io/bikewatching_Boston/",
         "description": "This is an immersive, interactive map visualization of bike traffic in the Boston area during different times of the day."
     },
     {
         "title": "Voluptatum aut culpa veniam?",
         "year": "c. 2022",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "link": "",
         "description": "Est in accusamus, maiores ex ipsam perspiciatis et amet nobis vero animi temporibus obcaecati. Eum delectus dicta itaque repellendus reprehenderit, optio perferendis, ad corporis unde quidem sunt. Molestiae, sunt atque."
     },
     {
         "title": "Consectetur accusantium incidunt mollitia?",
         "year": "c. 2014",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "link": "",
         "description": "Magnam aspernatur modi recusandae assumenda nesciunt a quidem illum. Veritatis vero error esse harum consequuntur, quaerat saepe in illum eaque quos iste similique sint aspernatur laboriosam. Iusto animi molestias error?"
     },
     {
         "title": "Nam aspernatur maxime earum.",
         "year": "c. 2019",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "link": "",
         "description": "Sequi consectetur ab impedit earum, voluptas quasi exercitationem fugit. Excepturi tempore magni, velit similique totam suscipit ipsam accusantium aut sequi inventore maxime aperiam vero voluptatibus, sed culpa, repudiandae ab iure!"
     },
     {
         "title": "Iste sapiente est dolore.",
         "year": "c. 2023",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "link": "",
         "description": "In, beatae. Repellat numquam facilis aperiam, quidem nesciunt officiis id cumque, ab iusto dolores cupiditate dicta! Officia explicabo iste vitae ad placeat amet, eligendi voluptate quos maxime odio, aut expedita."
     },
     {
         "title": "Cupiditate eos cum nostrum?",
         "year": "c. 2024",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "link": "",
         "description": "Nulla optio, alias itaque voluptates aspernatur expedita dolor? Saepe ad iure quisquam fugit, dolorum repellendus culpa voluptatibus recusandae totam consectetur, possimus labore maiores mollitia accusantium facilis illo voluptates consequuntur? Iure?"
     },
     {
         "title": "Earum veritatis ipsam vel?",
         "year": "c. 2005",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "link": "",
         "description": "Asperiores suscipit doloribus itaque similique minus architecto, unde velit! Dignissimos corporis facere assumenda saepe atque magnam earum consectetur suscipit? Provident dicta dolor hic ad reprehenderit voluptates laborum, cupiditate necessitatibus nostrum?"
     },
     {

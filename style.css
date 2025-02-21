@@ -91,6 +91,12 @@ html{
       display: grid;
       grid-template-rows: subgrid;
       grid-row: span 3;
+      overflow: hidden;
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
       h2{
         margin: 0;
       }
