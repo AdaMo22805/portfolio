@@ -11,8 +11,27 @@ let timeScale = d3.scaleTime([d3.min(commits, d => d.datetime), d3.max(commits, 
 let commitMaxTime = timeScale.invert(commitProgress);
 
 let filteredCommits = [];
-// commits.filter(commit => commit.datetime <= commitMaxTime);
-// console.log(filteredCommits)
+let filteredData = [];
+
+function updateFileList(files) {
+  d3.select('.files').selectAll('div').remove(); // don't forget to clear everything first so we can re-render
+  let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
+
+  let dt = filesContainer.append('dt');
+  dt.append('code').text(d => d.name);
+
+  // Append <small> inside <dt> (inside .each() to retain d)
+  dt.each(function(d) {
+    d3.select(this).append('small').text(`${d.lines.length} lines`);
+  });
+  // filesContainer.append('dd').text(`${d.lines.length} lines`);  // TODO
+  filesContainer.append('dd')
+    .selectAll('div')
+    .data(d => d.lines) // Bind each line to a div
+    .enter()
+    .append('div')
+    .attr('class', 'line');
+}
 
 
 async function loadData() {
@@ -24,7 +43,9 @@ async function loadData() {
         date: new Date(row.date + 'T00:00' + row.timezone),
         datetime: new Date(row.datetime),
     }));
-    displayStats();
+    // console.log(data);
+    processCommits();
+    displayStats(commits, data);
     // console.log(commits);
     let timeScale = d3.scaleTime([d3.min(commits, d => d.datetime), d3.max(commits, d => d.datetime)], [0, 100]);
     let commitMaxTime = timeScale.invert(commitProgress);
@@ -39,6 +60,19 @@ async function loadData() {
         timeStyle: "short"
       });
       filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
+      filteredData = data.filter(d => d.datetime <= commitMaxTime);
+      displayStats(filteredCommits, filteredData);
+      console.log(filteredData);
+
+      let lines = filteredCommits.flatMap((d) => d.lines);
+      let files = [];
+      files = d3
+        .groups(lines, (d) => d.file)
+        .map(([name, lines]) => {
+          return { name, lines };
+        });
+      // console.log(files);
+      updateFileList(files)
       updateScatterplot(filteredCommits)
     }
 
@@ -217,48 +251,52 @@ function processCommits() {
   }
   // console.log(filteredCommits);
 
-  function displayStats() {
+  function displayStats(commitGrp, dataGrp) {
     // Process commits first
-    processCommits();
-    // filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
-    // console.log(commit.datetime);
-    // console.log(commitMaxTime);
-    // console.log(filteredCommits);
+    // processCommits();
+    
+    d3.select('#stats').selectAll('*').remove();
 
     // Create the dl element
     const dl = d3.select('#stats').append('dl').attr('class', 'stats');
 
     // Add total commits
     dl.append('dt').text('Total commits');
-    dl.append('dd').text(commits.length);
+    dl.append('dd').text(commitGrp.length);
 
     // Add total LOC
     dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
-    dl.append('dd').text(data.length);
+    dl.append('dd').text(dataGrp.length);
 
     // Add max depth of file
     dl.append('dt').html('Max Lines');
-    dl.append('dd').text(d3.max(commits, (d) => d.totalLines));
+    dl.append('dd').text(d3.max(commitGrp, (d) => d.totalLines));
 
     // Add number of authors
-    let authorGroups = d3.groups(commits, (d) => d.author);
+    let authorGroups = d3.groups(commitGrp, (d) => d.author);
     let numAuthors = authorGroups.length;
     dl.append('dt').html('Authors');
     dl.append('dd').text(numAuthors);
 
     // Add most common day for commits
     let dayCounts = d3.rollup(
-      commits,
+      commitGrp,
       (v) => v.length, // Count occurrences
       (d) => d.datetime.getDay() // Get day of the week (0-6)
     );
     
-      // Find the most common day
-    let mostCommonDay = [...dayCounts.entries()].reduce((a, b) => (a[1] > b[1] ? a : b))[0];
+    //   // Find the most common day
+    // let mostCommonDay = [...dayCounts.entries()].reduce((a, b) => (a[1] > b[1] ? a : b))[0];
     
-      // Map numeric days to names
+    //   // Map numeric days to names
+    // let dayNames = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
+    // let mostCommonDayName = dayNames[mostCommonDay];
+    let mostCommonDay = [...dayCounts.entries()]
+        .reduce((a, b) => (a[1] > b[1] ? a : b), [null, 0])[0];
+
     let dayNames = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
-    let mostCommonDayName = dayNames[mostCommonDay];
+    let mostCommonDayName = mostCommonDay !== null ? dayNames[mostCommonDay] : 'N/A';
+
 
     dl.append('dt').html('Freq Commit Day');
     dl.append('dd').text(mostCommonDayName);
