@@ -300,7 +300,7 @@ html{
   }
 
   circle {
-    transition: 200ms;
+    transition: all 200ms, r calc(var(--r) * 100ms);
     transform-origin: center;
     transform-box: fill-box;
   }
@@ -363,6 +363,54 @@ html{
       grid-row: 2;
       margin: 5px 0;
     }
+  }
+
+  /* #slidebar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #slidebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+  }
+
+  #slider {
+    width: 800px;
+  }
+
+  #selected-time {
+    text-align: right;
+    margin-top: 5px;
+  } */
+
+  #slidebar-container{
+    margin-left: auto;
+    grid-template-columns: auto;
+    display: grid;
+    /* text-align: center; */
+    /* width: 100%; */
+    margin-top: 50px;
+  }
+  #slidebar #text{
+    width: 35px;
+    padding-right: 5px;
+    text-align: right;
+  }
+  #slider{
+    width: 80%;
+    margin-left: 15px;
+    align-self: right;
+  }
+  #selected-time {
+    display: block; /* Ensures input and time stack inside label */
+    width: 100%; /* Optional: makes slider full width */
+    text-align: right;
+    color: gray;
   }
 
 }
