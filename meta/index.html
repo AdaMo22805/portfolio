@@ -18,15 +18,15 @@
         <!-- Dynamically added content will appear here -->
     </div>
 
-    <div id="slidebar-container">
+    <!-- <div id="slidebar-container">
         <label id="slidebar">Show commits until:
                 <input id="slider" type=range min="0" max="100" value="100">
                 <time id="selected-time"></time>
         </label>
-    </div>
-    <dl class="files">
+    </div> -->
+    <!-- <dl class="files">
         
-    </dl>
+    </dl> -->
 
     <!-- <label>
         Show commits until:
@@ -36,9 +36,17 @@
     <p>Commit Progress: <span id="progressValue">100</span>%</p> -->
 
     <h2>Commits by time of day</h2>
-    <div id="chart">
-        <!-- Dynamically added content will appear here -->
+    <div id="scrollytelling">
+        <div id="scroll-container">
+            <div id="spacer"></div>
+            <div id="items-container"></div>
+        </div>
+        <!-- our old scatterplot div -->
+        <div id="chart"></div>
     </div>
+    <dl class="files">
+        
+    </dl>
 
     <dl id="commit-tooltip" class="info tooltip">
         <dt>Commit: </dt>

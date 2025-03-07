@@ -6,12 +6,64 @@ updateTooltipVisibility(false);
 
 let brushSelection = null;
 let selectedCommits = [];
-let commitProgress = 100;
+let commitProgress = 200;
 let timeScale = d3.scaleTime([d3.min(commits, d => d.datetime), d3.max(commits, d => d.datetime)], [0, 100]);
 let commitMaxTime = timeScale.invert(commitProgress);
 
 let filteredCommits = [];
 let filteredData = [];
+
+let NUM_ITEMS = 100; // Ideally, let this value be the length of your commit history
+let ITEM_HEIGHT = 5; // Feel free to change
+let VISIBLE_COUNT = 6; // Feel free to change as well
+let totalHeight = (NUM_ITEMS - 1) * ITEM_HEIGHT;
+const scrollContainer = d3.select('#scroll-container');
+const spacer = d3.select('#spacer');
+spacer.style('height', `${totalHeight}px`);
+const itemsContainer = d3.select('#items-container');
+scrollContainer.on('scroll', () => {
+  const scrollTop = scrollContainer.property('scrollTop');
+  let startIndex = Math.floor(scrollTop / ITEM_HEIGHT);
+  startIndex = Math.max(0, Math.min(startIndex, commits.length - VISIBLE_COUNT));
+  renderItems(startIndex);
+});
+
+function renderItems(startIndex) {
+  let sortedCommits = d3.sort(commits, d => d.datetime);
+  
+  // Clear things off
+  itemsContainer.selectAll('div').remove();
+  const endIndex = Math.min(startIndex + VISIBLE_COUNT, commits.length);
+  let newCommitSlice = sortedCommits.slice(startIndex, endIndex);
+  // TODO: how should we update the scatterplot (hint: it's just one function call)
+  updateScatterplot(newCommitSlice);
+  // Re-bind the commit data to the container and represent each using a div
+  itemsContainer.selectAll('div')
+                  .data(newCommitSlice)
+                  .enter()
+                  .append('div')
+                  .attr('class', 'commit-item') // Add a class for styling
+                  .append('p') // Append paragraph inside each div
+                  .html(d => `
+                      On ${d.datetime.toLocaleString("en", { dateStyle: "full", timeStyle: "short" })}, I made
+                      <a href="${d.url}" target="_blank">
+                        ${sortedCommits.indexOf(d) > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'}
+                      </a>. I edited ${d.totalLines} lines across 
+                      ${d3.rollups(d.lines, D => D.length, d => d.file).length} files. 
+                      Then I looked over all I had made, and I saw that it was very good.
+                  `)
+                  .style('position', 'relative')
+                  .style('transform', (_, idx) => `translateY(${idx * ITEM_HEIGHT}px)`)
+                  .append('hr')
+                  .attr('class', 'commit-separator')
+                  .style('border', 'none')
+                  .style('height', '1px')
+                  .style('background', '#ccc')
+                  .style('margin', '10px 0');
+
+
+  displayCommitFiles(newCommitSlice);
+}
 
 function updateFileList(files) {
   d3.select('.files').selectAll('div').remove(); // don't forget to clear everything first so we can re-render
@@ -35,6 +87,25 @@ function updateFileList(files) {
     .style('background', d => fileTypeColors(d.type));
 }
 
+function displayCommitFiles(comm) {
+  const lines = comm.flatMap((d) => d.lines);
+  let fileTypeColors = d3.scaleOrdinal(d3.schemeTableau10);
+  let files = d3.groups(lines, (d) => d.file).map(([name, lines]) => {
+    return { name, lines };
+  });
+  files = d3.sort(files, (d) => -d.lines.length);
+  d3.select('.files').selectAll('div').remove();
+  let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
+  filesContainer.append('dt').html(d => `<code>${d.name}</code><small>${d.lines.length} lines</small>`);
+  filesContainer.append('dd')
+                .selectAll('div')
+                .data(d => d.lines)
+                .enter()
+                .append('div')
+                .attr('class', 'line')
+                .style('background', d => fileTypeColors(d.type));
+}
+
 
 async function loadData() {
     data = await d3.csv('loc.csv', (row) => ({
@@ -49,51 +120,52 @@ async function loadData() {
     processCommits();
     displayStats(commits, data);
     // console.log(commits);
-    let timeScale = d3.scaleTime([d3.min(commits, d => d.datetime), d3.max(commits, d => d.datetime)], [0, 100]);
-    let commitMaxTime = timeScale.invert(commitProgress);
+    // let timeScale = d3.scaleTime([d3.min(commits, d => d.datetime), d3.max(commits, d => d.datetime)], [0, 100]);
+    // let commitMaxTime = timeScale.invert(commitProgress);
 
     // const timeSlider = document.getElementById('time-slider');
-    const selectedTime = document.getElementById('selected-time');
+    // const selectedTime = document.getElementById('selected-time');
 
-    function updateCommitTime(progress) {
-      commitMaxTime = timeScale.invert(progress);
-      selectedTime.textContent = commitMaxTime.toLocaleString(undefined, {
-        dateStyle: "long",
-        timeStyle: "short"
-      });
-      filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
-      filteredData = data.filter(d => d.datetime <= commitMaxTime);
-      displayStats(filteredCommits, filteredData);
+    // function updateCommitTime(progress) {
+    //   commitMaxTime = timeScale.invert(progress);
+    //   selectedTime.textContent = commitMaxTime.toLocaleString(undefined, {
+    //     dateStyle: "long",
+    //     timeStyle: "short"
+    //   });
+      // filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
+      // filteredData = data.filter(d => d.datetime <= commitMaxTime);
+      // displayStats(filteredCommits, filteredData);
 
-      let lines = filteredCommits.flatMap((d) => d.lines);
-      let files = [];
-      files = d3
-        .groups(lines, (d) => d.file)
-        .map(([name, lines]) => {
-          return { name, lines };
-        });
-      files = d3.sort(files, (d) => -d.lines.length);
-      updateFileList(files)
-      updateScatterplot(filteredCommits)
-    }
-
+      // let lines = filteredCommits.flatMap((d) => d.lines);
+      // let files = [];
+      // files = d3
+      //   .groups(lines, (d) => d.file)
+      //   .map(([name, lines]) => {
+      //     return { name, lines };
+      //   });
+      // files = d3.sort(files, (d) => -d.lines.length);
+      // updateFileList(files)
+      // updateScatterplot(filteredCommits)
+    // }
+    // displayStats(commits, data);
     // Event listener for slider changes
-    slider.addEventListener("input", function () {
-      commitProgress = +this.value;
-      selectedTime.textContent = timeScale.invert(commitProgress).toLocaleString();
-      updateCommitTime(commitProgress);
-      filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
-      updateScatterplot(filteredCommits)
-      // console.log(filteredCommits);
-    });
+    // slider.addEventListener("input", function () {
+    //   commitProgress = +this.value;
+    //   selectedTime.textContent = timeScale.invert(commitProgress).toLocaleString();
+    //   updateCommitTime(commitProgress);
+    //   filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
+    //   updateScatterplot(filteredCommits)
+    //   // console.log(filteredCommits);
+    // });
 
     // Initialize UI with starting values
-    updateCommitTime(commitProgress);
+    // updateCommitTime(commitProgress);
+    // updateScatterplot(commits);
 }
 
 // function createScatterplot(){
 function updateScatterplot(filteredCommits){
-  const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+  // const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
   // const sortedCommits = d3.sort(filteredCommits, (d) => -d.totalLines);
 
   const width = 1000;
@@ -203,7 +275,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadData();
   // createScatterplot();
   // console.log(filteredCommits);
-  updateScatterplot(filteredCommits)
+  updateScatterplot(commits);
+  renderItems(0);
   brushSelector();
 });
 
@@ -246,15 +319,15 @@ function processCommits() {
 
         return ret;
       });
-      filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
-      updateScatterplot(filteredCommits)
+      // filteredCommits = commits.filter(commit => commit.datetime <= commitMaxTime);
+      // updateScatterplot(filteredCommits)
       // console.log(filteredCommits);
   }
   // console.log(filteredCommits);
 
   function displayStats(commitGrp, dataGrp) {
     // Process commits first
-    // processCommits();
+    processCommits();
     
     d3.select('#stats').selectAll('*').remove();
 
